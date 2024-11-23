@@ -30,21 +30,19 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val etPassword: EditText = findViewById(R.id.etPassword)
-        val ivTogglePassword: ImageView = findViewById(R.id.ivTogglePassword)
 
-        ivTogglePassword.setOnClickListener {
+        binding.ivTogglePassword.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
 
             if (isPasswordVisible) {
-                etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                ivTogglePassword.setImageResource(R.drawable.ic_visibility)
+                binding.etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility)
             } else {
-                etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
+                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
             }
 
-            etPassword.setSelection(etPassword.text.length)
+            binding.etPassword.setSelection(binding.etPassword.text.length)
         }
 
         binding.tvSignUp.setOnClickListener {

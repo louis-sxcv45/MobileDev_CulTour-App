@@ -3,6 +3,8 @@ package com.example.cultourapp.view
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputType
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -32,38 +34,36 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
+        //Action toggle password
         binding.ivTogglePassword.setOnClickListener {
-            togglePasswordVisibility(binding.etPassword, binding.ivTogglePassword)
-        }
-
-        binding.ivToggleRePassword.setOnClickListener {
-            togglePasswordVisibility(binding.etRePassword, binding.ivToggleRePassword)
-        }
-    }
-
-    private fun togglePasswordVisibility(editText: EditText, imageView: ImageView) {
-        if (editText == binding.etPassword) {
             isPasswordVisible = !isPasswordVisible
-            editText.inputType = if (isPasswordVisible) {
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+
+            if (isPasswordVisible) {
+                binding.etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility)
             } else {
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
             }
-            imageView.setImageResource(
-                if (isPasswordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
-            )
-        } else {
-            isRePasswordVisible = !isRePasswordVisible
-            editText.inputType = if (isRePasswordVisible) {
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            } else {
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            }
-            imageView.setImageResource(
-                if (isRePasswordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
-            )
+
+            binding.etPassword.setSelection(binding.etPassword.text.length)
         }
 
-        editText.setSelection(editText.text.length)
+
+        //Action toggle re password
+        binding.ivToggleRePassword.setOnClickListener {
+            isPasswordVisible = !isPasswordVisible
+
+            if (isPasswordVisible) {
+                binding.etRePassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                binding.ivToggleRePassword.setImageResource(R.drawable.ic_visibility)
+            } else {
+                binding.etRePassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.ivToggleRePassword.setImageResource(R.drawable.ic_visibility_off)
+            }
+
+            binding.etRePassword.setSelection(binding.etPassword.text.length)
+        }
+
     }
 }
