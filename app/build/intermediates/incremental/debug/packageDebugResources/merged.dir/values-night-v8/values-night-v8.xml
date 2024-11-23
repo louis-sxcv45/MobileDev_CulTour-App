@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_blue">#619DF8</color>
+    <color name="tone_blue">#3D6F96</color>
+    <string name="app_name">CulTour</string>
+    <string name="login_title">Login</string>
+    <string name="logo_desc">Logo</string>
+    <string name="register_title">Register</string>
+    <string name="slogan">Explore Southeast Asia, Discover Your Gateway</string>
+    <string name="splash_txt">Explore Southeast Asia, Discover Your Gateway</string>
+    <string name="text_confirm_password">Re-Enter Your Password</string>
+    <string name="text_dont_have_an_account">Don\'t have an account?</string>
+    <string name="text_email">Enter Your Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_sign_up">Sign Up</string>
+    <string name="text_username">Username</string>
+    <string name="toggle_password">Toggle Password</string>
+    <style name="Base.Theme.CulTourApp" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/transparent</item>
+    </style>
+</resources>
