@@ -30,39 +30,24 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val etPassword: EditText = findViewById(R.id.etPassword)
-        val ivTogglePassword: ImageView = findViewById(R.id.ivTogglePassword)
 
-        ivTogglePassword.setOnClickListener {
+        binding.ivTogglePassword.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
 
             if (isPasswordVisible) {
-                etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                ivTogglePassword.setImageResource(R.drawable.ic_visibility)
+                binding.etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility)
             } else {
-                etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
+                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
             }
 
-            etPassword.setSelection(etPassword.text.length)
+            binding.etPassword.setSelection(binding.etPassword.text.length)
         }
 
         binding.tvSignUp.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-        startAnimationsWhenReady()
-    }
-    private fun startAnimationsWhenReady() {
-        binding.loginTitle.alpha = 0f
-        binding.loginImg.alpha = 0f
-        binding.tvUsername.alpha = 0f
-        binding.etUsername.alpha = 0f
-        binding.tvPassword.alpha = 0f
-        binding.etPassword.alpha = 0f
-        binding.ivTogglePassword.alpha = 0f
-        binding.btnLogin.alpha = 0f
-        binding.signupSection.alpha = 0f
-
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -73,6 +58,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startAnimations() {
+        binding.loginTitle.alpha = 0f
+        binding.loginImg.alpha = 0f
+        binding.tvUsername.alpha = 0f
+        binding.etUsername.alpha = 0f
+        binding.tvPassword.alpha = 0f
+        binding.etPassword.alpha = 0f
+        binding.ivTogglePassword.alpha = 0f
+        binding.btnLogin.alpha = 0f
+        binding.signupSection.alpha = 0f
+
         val titleAnimator = AnimatorSet().apply {
             playTogether(
                 ObjectAnimator.ofFloat(binding.loginTitle, View.TRANSLATION_Y, -100f, 0f).setDuration(500),
