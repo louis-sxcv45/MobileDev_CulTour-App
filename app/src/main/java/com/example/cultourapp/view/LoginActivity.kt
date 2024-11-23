@@ -50,19 +50,6 @@ class LoginActivity : AppCompatActivity() {
         binding.tvSignUp.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-        startAnimationsWhenReady()
-    }
-    private fun startAnimationsWhenReady() {
-        binding.loginTitle.alpha = 0f
-        binding.loginImg.alpha = 0f
-        binding.tvUsername.alpha = 0f
-        binding.etUsername.alpha = 0f
-        binding.tvPassword.alpha = 0f
-        binding.etPassword.alpha = 0f
-        binding.ivTogglePassword.alpha = 0f
-        binding.btnLogin.alpha = 0f
-        binding.signupSection.alpha = 0f
-
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -73,6 +60,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startAnimations() {
+        binding.loginTitle.alpha = 0f
+        binding.loginImg.alpha = 0f
+        binding.tvUsername.alpha = 0f
+        binding.etUsername.alpha = 0f
+        binding.tvPassword.alpha = 0f
+        binding.etPassword.alpha = 0f
+        binding.ivTogglePassword.alpha = 0f
+        binding.btnLogin.alpha = 0f
+        binding.signupSection.alpha = 0f
+
         val titleAnimator = AnimatorSet().apply {
             playTogether(
                 ObjectAnimator.ofFloat(binding.loginTitle, View.TRANSLATION_Y, -100f, 0f).setDuration(500),
