@@ -8,12 +8,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cultourapp.databinding.ActivityMainBinding
-import com.example.cultourapp.loginPage.LoginActivity
+import com.example.cultourapp.view.LoginActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,7 +29,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        startAnimations()
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                startAnimations()
+            }
+        })
+
         Handler().postDelayed({
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -36,7 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startAnimations() {
-        binding.textView.visibility = View.INVISIBLE
+        binding.textView.alpha = 0f
+        binding.imgLogo.alpha = 0f
 
         val imageAnimator = AnimatorSet().apply {
             playTogether(
@@ -55,16 +64,7 @@ class MainActivity : AppCompatActivity() {
         AnimatorSet().apply {
             playSequentially(
                 imageAnimator,
-                AnimatorSet().apply {
-                    addListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationStart(animation: Animator) {
-                            super.onAnimationStart(animation)
-                            binding.textView.visibility = View.VISIBLE
-                            binding.imgLogo.visibility = View.VISIBLE
-                        }
-                    })
-                    playTogether(titleAnimator)
-                }
+                titleAnimator
             )
             start()
         }
