@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Patterns
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,22 +33,10 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        binding.ivTogglePassword.setOnClickListener {
-            isPasswordVisible = !isPasswordVisible
-
-            if (isPasswordVisible) {
-                binding.etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility)
-            } else {
-                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
-            }
-
-            binding.etPassword.setSelection(binding.etPassword.text.length)
-        }
 
         binding.tvSignUp.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
         }
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -55,16 +45,82 @@ class LoginActivity : AppCompatActivity() {
                 startAnimations()
             }
         })
+
+        emailFocusedListener()
+        passwordFocusedListener()
+    }
+
+    private fun validRegister() {
+        binding.btnLogin.setOnClickListener {
+            if (areFieldsValid()) {
+                Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please fill all the fields correctly", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun areFieldsValid(): Boolean {
+        val emailText = binding.etEmail.text.toString()
+        val passwordText = binding.etPassword.text.toString()
+
+        val isEmailValid = emailText.isNotEmpty()
+        val isPasswordValid = passwordText.isNotEmpty()
+
+        return isEmailValid && isPasswordValid
+    }
+
+    private fun emailFocusedListener() {
+        binding.etEmail.setOnFocusChangeListener { _, focused ->
+            val emailText = binding.etEmail.text.toString()
+            if (!focused) {
+                if (emailText.isEmpty()) {
+                    binding.emailInputLayout.error = "Email is required"
+                    binding.emailInputLayout.errorIconDrawable = null
+                } else {
+                    val validationMessage = validEmail()
+                    binding.emailInputLayout.error = validationMessage
+                    binding.emailInputLayout.errorIconDrawable = null
+                    if (validationMessage == null) {
+                        binding.emailInputLayout.errorIconDrawable = null
+                    }
+                }
+                validRegister()
+            }
+        }
+    }
+
+    private fun validEmail(): String? {
+        val emailText = binding.etEmail.text.toString()
+        return if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+            "Invalid Email Address"
+        } else {
+            null
+        }
+    }
+
+    private fun passwordFocusedListener() {
+        binding.etPassword.setOnFocusChangeListener { _, focused ->
+            val usernameText = binding.etPassword.text.toString()
+            if (!focused) {
+                if (usernameText.isEmpty()) {
+                    binding.passwordInputLayout.error = "Password is required"
+                    binding.passwordInputLayout.errorIconDrawable = null
+                } else {
+                    binding.passwordInputLayout.error = null
+                }
+                validRegister()
+            }
+        }
     }
 
     private fun startAnimations() {
         binding.loginTitle.alpha = 0f
         binding.loginImg.alpha = 0f
-        binding.tvUsername.alpha = 0f
-        binding.etUsername.alpha = 0f
+        binding.tvEmail.alpha = 0f
+        binding.emailInputLayout.alpha = 0f
         binding.tvPassword.alpha = 0f
-        binding.etPassword.alpha = 0f
-        binding.ivTogglePassword.alpha = 0f
+        binding.passwordInputLayout.alpha = 0f
         binding.btnLogin.alpha = 0f
         binding.signupSection.alpha = 0f
 
@@ -86,14 +142,14 @@ class LoginActivity : AppCompatActivity() {
             playSequentially(
                 AnimatorSet().apply {
                     playTogether(
-                        ObjectAnimator.ofFloat(binding.tvUsername, View.TRANSLATION_X, -100f, 0f).setDuration(400),
-                        ObjectAnimator.ofFloat(binding.tvUsername, View.ALPHA, 0f, 1f).setDuration(400)
+                        ObjectAnimator.ofFloat(binding.tvEmail, View.TRANSLATION_X, -100f, 0f).setDuration(400),
+                        ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 0f, 1f).setDuration(400)
                     )
                 },
                 AnimatorSet().apply {
                     playTogether(
-                        ObjectAnimator.ofFloat(binding.etUsername, View.TRANSLATION_X, -100f, 0f).setDuration(400),
-                        ObjectAnimator.ofFloat(binding.etUsername, View.ALPHA, 0f, 1f).setDuration(400)
+                        ObjectAnimator.ofFloat(binding.emailInputLayout, View.TRANSLATION_X, -100f, 0f).setDuration(400),
+                        ObjectAnimator.ofFloat(binding.emailInputLayout, View.ALPHA, 0f, 1f).setDuration(400)
                     )
                 },
                 AnimatorSet().apply {
@@ -104,14 +160,8 @@ class LoginActivity : AppCompatActivity() {
                 },
                 AnimatorSet().apply {
                     playTogether(
-                        ObjectAnimator.ofFloat(binding.etPassword, View.TRANSLATION_X, -100f, 0f).setDuration(400),
-                        ObjectAnimator.ofFloat(binding.etPassword, View.ALPHA, 0f, 1f).setDuration(400)
-                    )
-                },
-                AnimatorSet().apply {
-                    playTogether(
-                        ObjectAnimator.ofFloat(binding.ivTogglePassword, View.TRANSLATION_X, -100f, 0f).setDuration(400),
-                        ObjectAnimator.ofFloat(binding.ivTogglePassword, View.ALPHA, 0f, 1f).setDuration(400)
+                        ObjectAnimator.ofFloat(binding.passwordInputLayout, View.TRANSLATION_X, -100f, 0f).setDuration(400),
+                        ObjectAnimator.ofFloat(binding.passwordInputLayout, View.ALPHA, 0f, 1f).setDuration(400)
                     )
                 },
                 AnimatorSet().apply {

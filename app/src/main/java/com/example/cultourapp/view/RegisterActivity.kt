@@ -2,32 +2,34 @@ package com.example.cultourapp.view
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
+import android.util.Patterns
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cultourapp.R
 import com.example.cultourapp.databinding.ActivityRegisterBinding
+import com.example.cultourapp.model.di.Injection
+import com.example.cultourapp.model.repository.UserRepository
+import com.example.cultourapp.modelView.AuthViewModel
+import com.example.cultourapp.modelView.factory.ViewModelFactory
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
-
-    private var isPasswordVisible = false
+    private val authViewModel: AuthViewModel by viewModels<AuthViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
+    private lateinit var userRepo: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -37,39 +39,38 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
-        //Action toggle password
-        binding.ivTogglePassword.setOnClickListener {
-            isPasswordVisible = !isPasswordVisible
-
-            if (isPasswordVisible) {
-                binding.etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility)
-            } else {
-                binding.etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                binding.ivTogglePassword.setImageResource(R.drawable.ic_visibility_off)
+        userRepo = Injection.provideRepository(this)
+        authViewModel.registerResponse.observe(this) { response ->
+            if (response?.success == true) {
+                Toast.makeText(this, "${response.message}", Toast.LENGTH_SHORT).show()
+                goToLoginPage()
             }
 
-            binding.etPassword.setSelection(binding.etPassword.text.length)
+            if (response?.success == false){
+                Toast.makeText(this, "${response.message}", Toast.LENGTH_SHORT).show()
+            }
         }
 
+        authViewModel.loading.observe(this) { loading ->
+            binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        }
 
-        //Action toggle re password
-        binding.ivToggleRePassword.setOnClickListener {
-            isPasswordVisible = !isPasswordVisible
-
-            if (isPasswordVisible) {
-                binding.etRePassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                binding.ivToggleRePassword.setImageResource(R.drawable.ic_visibility)
+        binding.btnSignUp.setOnClickListener {
+            if (areFieldsValid()) {
+                val userData = mapOf(
+                    "username" to binding.etUsername.text.toString(),
+                    "email" to binding.etEmail.text.toString(),
+                    "password" to binding.etPassword.text.toString()
+                )
+                authViewModel.registerUser(userData)
             } else {
-                binding.etRePassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                binding.ivToggleRePassword.setImageResource(R.drawable.ic_visibility_off)
+                Toast.makeText(this, "Please fill all the fields correctly", Toast.LENGTH_SHORT).show()
             }
-
-            binding.etRePassword.setSelection(binding.etPassword.text.length)
         }
 
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+            finish()
         }
 
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -79,7 +80,130 @@ class RegisterActivity : AppCompatActivity() {
                 startAnimations()
             }
         })
+
+
+        emailFocusedListener()
+        usernameFocusedListener()
+        passwordFocusedListener()
+        rePasswordFocusedListener()
+
     }
+
+
+    private fun areFieldsValid(): Boolean {
+        val usernameText = binding.etUsername.text.toString()
+        val emailText = binding.etEmail.text.toString()
+        val passwordText = binding.etPassword.text.toString()
+        val rePasswordText = binding.etRePassword.text.toString()
+
+        val isUsernameValid = usernameText.isNotEmpty()
+        val isEmailValid = emailText.isNotEmpty() && validEmail() == null
+        val isPasswordValid = passwordText.isNotEmpty() && validPassword() == null
+        val isRePasswordValid = rePasswordText.isNotEmpty() && confirmPassword() == null
+
+        return isUsernameValid && isEmailValid && isPasswordValid && isRePasswordValid
+    }
+
+    private fun goToLoginPage() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun usernameFocusedListener() {
+        binding.etUsername.setOnFocusChangeListener { _, focused ->
+            val usernameText = binding.etUsername.text.toString()
+            if (!focused) {
+                if (usernameText.isEmpty()) {
+                    binding.usernameInputLayout.error = "Username is required"
+                    binding.usernameInputLayout.errorIconDrawable = null
+                } else {
+                    binding.usernameInputLayout.error = null
+                }
+            }
+        }
+    }
+
+    private fun emailFocusedListener() {
+        binding.etEmail.setOnFocusChangeListener { _, focused ->
+            val emailText = binding.etEmail.text.toString()
+            if (!focused) {
+                if (emailText.isEmpty()) {
+                    binding.emailInputLayout.error = "Email is required"
+                    binding.emailInputLayout.errorIconDrawable = null
+                } else {
+                    val validationMessage = validEmail()
+                    binding.emailInputLayout.error = validationMessage
+                    if (validationMessage == null) {
+                        binding.emailInputLayout.errorIconDrawable = null
+                    }
+                }
+            }
+        }
+    }
+
+    private fun validEmail(): String? {
+        val emailText = binding.etEmail.text.toString()
+        return if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+            "Invalid Email Address"
+        } else {
+            null
+        }
+    }
+
+    private fun passwordFocusedListener() {
+        binding.etPassword.setOnFocusChangeListener { _, focused ->
+            val passwordText = binding.etPassword.text.toString()
+            if (!focused) {
+                if (passwordText.isEmpty()) {
+                    binding.passwordInputLayout.error = "Password is required"
+                    binding.passwordInputLayout.errorIconDrawable = null
+                } else {
+                    val validationMessage = validPassword()
+                    binding.passwordInputLayout.error = validationMessage
+                    if (validationMessage == null) {
+                        binding.passwordInputLayout.errorIconDrawable = null
+                    }
+                }
+            }
+        }
+    }
+
+    private fun rePasswordFocusedListener() {
+        binding.etRePassword.setOnFocusChangeListener { _, focused ->
+            val rePasswordText = binding.etRePassword.text.toString()
+            if (!focused) {
+                if (rePasswordText.isEmpty()) {
+                    binding.rePasswordInputLayout.error = "Confirm Your Password"
+                    binding.rePasswordInputLayout.errorIconDrawable = null
+                } else {
+                    val validationMessage = confirmPassword()
+                    binding.rePasswordInputLayout.error = validationMessage
+                    if (validationMessage == null) {
+                        binding.rePasswordInputLayout.errorIconDrawable = null
+                    }
+                }
+            }
+        }
+    }
+
+    private fun validPassword(): String? {
+        val passwordText = binding.etPassword.text.toString()
+        if (passwordText.length < 8) {
+            return "Minimum 8 Character Password"
+        }
+        return null
+    }
+
+    private fun confirmPassword(): String? {
+        val passwordText = binding.etPassword.text.toString()
+        val rePasswordText = binding.etRePassword.text.toString()
+        if (passwordText != rePasswordText) {
+            return "Password not match"
+        }
+        return null
+    }
+
 
     private fun startAnimations() {
         binding.registerTitle.alpha = 0f
@@ -88,11 +212,9 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvEmail.alpha = 0f
         binding.etEmail.alpha = 0f
         binding.tvPassword.alpha = 0f
-        binding.etPassword.alpha = 0f
-        binding.ivTogglePassword.alpha = 0f
+        binding.passwordInputLayout.alpha = 0f
         binding.tvRePassword.alpha = 0f
-        binding.etRePassword.alpha = 0f
-        binding.ivToggleRePassword.alpha = 0f
+        binding.rePasswordInputLayout.alpha = 0f
         binding.btnSignUp.alpha = 0f
         binding.loginSection.alpha = 0f
 
@@ -153,20 +275,9 @@ class RegisterActivity : AppCompatActivity() {
 
                 AnimatorSet().apply {
                     playTogether(
-                        ObjectAnimator.ofFloat(binding.etPassword, View.TRANSLATION_X, -100f, 0f)
+                        ObjectAnimator.ofFloat(binding.passwordInputLayout, View.TRANSLATION_X, -100f, 0f)
                             .setDuration(400),
-                        ObjectAnimator.ofFloat(binding.etPassword, View.ALPHA, 0f, 1f)
-                            .setDuration(400)
-                    )
-                },
-
-
-                AnimatorSet().apply {
-                    playTogether(
-                        ObjectAnimator.ofFloat(
-                            binding.ivTogglePassword, View.TRANSLATION_X, -100f, 0f)
-                        .setDuration(400),
-                        ObjectAnimator.ofFloat(binding.ivTogglePassword, View.ALPHA, 0f, 1f)
+                        ObjectAnimator.ofFloat(binding.passwordInputLayout, View.ALPHA, 0f, 1f)
                             .setDuration(400)
                     )
                 },
@@ -182,22 +293,9 @@ class RegisterActivity : AppCompatActivity() {
 
                 AnimatorSet().apply {
                     playTogether(
-                        ObjectAnimator.ofFloat(binding.etRePassword, View.TRANSLATION_X, -100f, 0f)
+                        ObjectAnimator.ofFloat(binding.rePasswordInputLayout, View.TRANSLATION_X, -100f, 0f)
                             .setDuration(400),
-                        ObjectAnimator.ofFloat(binding.etRePassword, View.ALPHA, 0f, 1f)
-                            .setDuration(400)
-                    )
-                },
-
-                AnimatorSet().apply {
-                    playTogether(
-                        ObjectAnimator.ofFloat(
-                            binding.ivToggleRePassword,
-                            View.TRANSLATION_X,
-                            -100f,
-                            0f
-                        ).setDuration(400),
-                        ObjectAnimator.ofFloat(binding.ivToggleRePassword, View.ALPHA, 0f, 1f)
+                        ObjectAnimator.ofFloat(binding.rePasswordInputLayout, View.ALPHA, 0f, 1f)
                             .setDuration(400)
                     )
                 },
