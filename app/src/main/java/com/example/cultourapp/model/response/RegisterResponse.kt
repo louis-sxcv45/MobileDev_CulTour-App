@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 data class RegisterResponse(
 
 	@field:SerializedName("data")
-	val data: Any? = null,
+	val data: Any?,
 
 	@field:SerializedName("success")
-	val success: Boolean? = null,
+	val success: Boolean,
 
 	@field:SerializedName("message")
-	val message: String? = null
+	val message: String
 )

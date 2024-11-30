@@ -24,7 +24,7 @@ class ViewModelFactory(
         @JvmStatic
         fun getInstance(context: Context): ViewModelFactory =
             instance ?: ViewModelFactory(
-                Injection.provideRepository(context),
+                Injection.provideUserRepository(context),
             ).also { instance = it }
     }
 }

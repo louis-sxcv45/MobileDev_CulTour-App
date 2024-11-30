@@ -1,31 +1,92 @@
 package com.example.cultourapp.modelView
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.cultourapp.model.repository.UserRepository
+import com.example.cultourapp.model.response.LoginResponse
 import com.example.cultourapp.model.response.RegisterResponse
+import com.example.cultourapp.model.response.UserData
+import com.example.cultourapp.model.pref.UserModel
+import kotlinx.coroutines.launch
 
 class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     private val _registerResponse = MutableLiveData<RegisterResponse?>()
     val registerResponse: LiveData<RegisterResponse?> = _registerResponse
 
+    private val _loginResponse = MutableLiveData<LoginResponse?>()
+    val loginResponse: LiveData<LoginResponse?> = _loginResponse
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
     fun registerUser(userData: Map<String, String>) {
         _loading.postValue(true)
-        userRepository.registerUser(userData, ::handleResponse)
+        userRepository.registerUser(userData) { response ->
+            _loading.postValue(false)
+            if (response.success) {
+                _registerResponse.postValue(response)
+            } else {
+                _registerResponse.postValue(RegisterResponse(success = false, data= null, message = response.message))
+            }
+        }
     }
 
-    private fun handleResponse(response: RegisterResponse) {
-        _loading.postValue(false)
-        if (response.success == true) {
-            _registerResponse.postValue(response)
-        } else {
-            _registerResponse.postValue(response)
+    fun loginUser(userData: Map<String, String>) {
+        _loading.postValue(true)
+        userRepository.loginUser(userData) { response ->
+            _loading.postValue(false)
+            _loginResponse.postValue(response)
+            if (response.success) {
+                checkTokenExpiration()
+                response.data?.let { userData ->
+                    storeUserSession(
+                        UserModel(
+                            email = userData.user.email ?: "",
+                            displayName = userData.user.displayName ?: ""
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+     private fun storeUserSession(user: UserModel) {
+        viewModelScope.launch {
+            userRepository.saveUserSession(user)
+            Log.d("AuthViewModel", "User session stored: $user")
+        }
+    }
+
+    fun getUserSession(): UserModel {
+        return userRepository.getSession()
+    }
+
+    private fun checkTokenExpiration() {
+        val token = userRepository.getToken()
+        if (token != null && isTokenExpired(token)) {
+            refreshToken()
+        }
+    }
+
+    private fun isTokenExpired(token: String): Boolean {
+        return System.currentTimeMillis() > getTokenExpirationTime(token)
+    }
+
+    private fun getTokenExpirationTime(token: String): Long {
+        return System.currentTimeMillis() + 3600000
+    }
+
+    private fun refreshToken() {
+        userRepository.refreshToken { success ->
+            if (success) {
+                Log.d("token", "token: ${userRepository.getToken()}")
+            } else {
+                // Handle token refresh failure
+            }
         }
     }
 }

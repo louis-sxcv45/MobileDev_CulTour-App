@@ -14,4 +14,5 @@
     <string name="text_confirm_password">Re-Enter Your Password</string>
     <string name="text_already_have_an_account">Already have an account?</string>
     <string name="helper_text">Required</string>
+    <string name="logout">Logout</string>
 </resources>

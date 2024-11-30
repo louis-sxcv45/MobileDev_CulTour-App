@@ -39,17 +39,18 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
-        userRepo = Injection.provideRepository(this)
+        userRepo = Injection.provideUserRepository(this)
         authViewModel.registerResponse.observe(this) { response ->
-            if (response?.success == true) {
-                Toast.makeText(this, "${response.message}", Toast.LENGTH_SHORT).show()
-                goToLoginPage()
-            }
-
-            if (response?.success == false){
-                Toast.makeText(this, "${response.message}", Toast.LENGTH_SHORT).show()
+            response?.let {
+                if (it.success) {
+                    Toast.makeText(this, "Registration successful: ${it.message}", Toast.LENGTH_SHORT).show()
+                    goToLoginPage()
+                } else {
+                    Toast.makeText(this, "Registration failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
 
         authViewModel.loading.observe(this) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
@@ -105,7 +106,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun goToLoginPage() {
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
     }
