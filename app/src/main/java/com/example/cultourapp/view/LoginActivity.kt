@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         userRepo = Injection.provideUserRepository(this)
 
         val userSession = authViewModel.getUserSession()
-        if (userSession.email.isNotEmpty()) {
+        if (userSession.email.isNotEmpty() && userSession.token.isNotEmpty()) {
             goToHome()
         }
 
@@ -53,20 +53,18 @@ class LoginActivity : AppCompatActivity() {
             response?.let {
                 if (it.success) {
                     Log.d("Token", "${it.data?.token}")
-                    Toast.makeText(this, "Login successful: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     goToHome()
                 } else {
-                    Toast.makeText(this, "Login failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        // Observe loading state
         authViewModel.loading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // Navigate to RegisterActivity if sign-up is clicked
         binding.tvSignUp.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()

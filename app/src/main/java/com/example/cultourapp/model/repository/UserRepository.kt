@@ -6,6 +6,7 @@ import com.example.cultourapp.model.response.LoginResponse
 import com.example.cultourapp.model.response.RegisterResponse
 import com.example.cultourapp.model.pref.UserModel
 import com.example.cultourapp.model.pref.UserPreferences
+import com.example.cultourapp.model.response.UserData
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,13 +63,13 @@ class UserRepository(
                     val responseBody = response.body()
                     if(responseBody != null) {
                         responseBody.data?.let { userData ->
-                            val email = userData.user.email ?: "Unknown Email"
-                            val displayName = userData.user.displayName ?: "Unknown Display Name"
+//                            val email = userData.user.email ?: "Unknown Email"
+//                            val displayName = userData.user.displayName ?: "Unknown Display Name"
+//
+//                            val userModel = UserModel(email = email, displayName = displayName, token = userData.token, refreshToken = userData.refreshToken)
 
-                            val userModel = UserModel(email = email, displayName = displayName, token = userData.token, refreshToken = userData.refreshToken)
-
-                            saveUserSession(userModel)
-                            Log.d("data", userModel.toString())
+                            saveUserSession(userData)
+                            Log.d("data", userData.toString())
                         }
                         callback(responseBody)
                     } else {
@@ -97,64 +98,52 @@ class UserRepository(
         })
     }
 
-    fun refreshToken(callback: (Boolean) -> Unit) {
-        val refreshToken = getRefreshToken()
-        if (refreshToken.isNullOrEmpty()) {
-            callback(false)
-            return
-        }
-
-        val requestBody = mapOf("refreshToken" to refreshToken)
-
-        // Call to the refresh token endpoint (not loginUser)
-        apiService.loginUser(requestBody).enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
-                    val responseData = response.body()?.data
-                    if (responseData != null) {
-                        // Assuming responseData contains the updated token and user information
-                        val userData = responseData.user
-                        val email = userData.email ?: "Unknown Email"
-                        val displayName = userData.displayName ?: "Unknown Display Name"
-
-                        // Create UserModel object for session
-                        val userModel = UserModel(
-                            email = email,
-                            displayName = displayName,
-                            token = responseData.token,
-                            refreshToken = responseData.refreshToken
-                        )
-
-                        // Save the refreshed user session
-                        saveUserSession(userModel)
-                        Log.d("data", responseData.toString())
-
-                        callback(true)
-                    } else {
-                        callback(false)
-                    }
-                } else {
-                    callback(false)
-                }
-            }
-
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                callback(false)
-            }
-        })
-    }
+//    fun refreshToken(callback: (Boolean) -> Unit) {
+//        val refreshToken = getRefreshToken()
+//        if (refreshToken.isNullOrEmpty()) {
+//            callback(false)
+//            return
+//        }
+//
+//        val requestBody = mapOf("refreshToken" to refreshToken)
+//
+//        // Call to the refresh token endpoint (not loginUser)
+//        apiService.loginUser(requestBody).enqueue(object : Callback<LoginResponse> {
+//            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+//                if (response.isSuccessful) {
+//                    val responseData = response.body()?.data
+//                    if (responseData != null) {
+//
+//                        // Save the refreshed user session
+//                        saveUserSession(responseData)
+//                        Log.d("data", responseData.toString())
+//
+//                        callback(true)
+//                    } else {
+//                        callback(false)
+//                    }
+//                } else {
+//                    callback(false)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+//                callback(false)
+//            }
+//        })
+//    }
 
 
-    fun getToken(): String? {
-        return userPreferences.getToken()
-    }
+//    fun getToken(): String? {
+//        return userPreferences.getToken()
+//    }
 
     private fun getRefreshToken(): String? {
         return userPreferences.getRefreshToken()
     }
 
-    fun saveUserSession(userModel: UserModel) {
-        userPreferences.saveUserSession(userModel, userModel.token ?: "", userModel.refreshToken ?: "")
+    fun saveUserSession(user: UserData) {
+        userPreferences.saveUserSession(user.user, user.token)
     }
 
     fun getSession(): UserModel {

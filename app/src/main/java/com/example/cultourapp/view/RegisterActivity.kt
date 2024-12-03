@@ -43,10 +43,10 @@ class RegisterActivity : AppCompatActivity() {
         authViewModel.registerResponse.observe(this) { response ->
             response?.let {
                 if (it.success) {
-                    Toast.makeText(this, "Registration successful: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     goToLoginPage()
                 } else {
-                    Toast.makeText(this, "Registration failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
