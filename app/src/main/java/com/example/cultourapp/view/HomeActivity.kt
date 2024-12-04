@@ -14,6 +14,7 @@ import com.example.cultourapp.databinding.ActivityHomeBinding
 import com.example.cultourapp.model.di.Injection
 import com.example.cultourapp.model.repository.UserRepository
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -60,11 +61,14 @@ class HomeActivity : AppCompatActivity() {
 
             // Initialize date picker
         val constraintsBuilder = CalendarConstraints.Builder()
-        constraintsBuilder.setStart(MaterialDatePicker.todayInUtcMilliseconds())
+            .setValidator(DateValidatorPointForward.now())
         val builder = MaterialDatePicker.Builder.dateRangePicker()
+            .setCalendarConstraints(constraintsBuilder.build())
+
         builder.setTitleText("Select Date Range")
-        builder.setCalendarConstraints(constraintsBuilder.build()) // Make sure to apply the constraints
+       // builder.setCalendarConstraints(constraintsBuilder.build()) // Make sure to apply the constraints
         datePicker = builder.build()
+
         binding.etStartDate.setOnClickListener {
             datePicker.show(supportFragmentManager, "date_picker")
         }
