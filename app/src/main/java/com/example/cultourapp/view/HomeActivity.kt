@@ -5,6 +5,7 @@ import androidx.core.util.Pair
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -45,25 +46,31 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
 
-// Inside your HomeActivity class
-
-// ... (your existing code) ...
-
-        // Initialize date picker in onCreate()
-
-            // ... your existing code ...
-
-            // Initialize date picker with constraints
- // Disables dates before today
-
-
-            // ... (rest of your code) ...
-
-            // Initialize date picker
         val constraintsBuilder = CalendarConstraints.Builder()
             .setValidator(DateValidatorPointForward.now())
         val builder = MaterialDatePicker.Builder.dateRangePicker()
             .setCalendarConstraints(constraintsBuilder.build())
+
+        val weatherSummary = "Partly Cloudy" ///ambil data cuaca dari API
+
+        val weatherText = "${binding.root.context.getString(R.string.weather_summary)} $weatherSummary"
+        val weatherError = "Failed to fetch weather data" ///variable untuk menampung bad respond nya dari API
+
+
+//        binding.tvWeatherText.text = weatherError ---> tampilkan jika user mendapatkan bad response yang dari API nya
+
+        if (weatherSummary.isNotEmpty()) {
+            // Jika weatherSummary memiliki isi, tampilkan teks dan ikon
+            binding.tvWeatherText.visibility = View.VISIBLE
+            binding.tvWeatherText.text = weatherText // Set teks jika belum disetel
+            binding.ivWeatherIcon.setImageResource(R.drawable.ic_very_cloudy) // Set gambar ikon sesuai cuaca dari weathersummary nya
+            binding.ivWeatherIcon.visibility = View.VISIBLE
+        } else {
+            // Jika weatherSummary kosong, sembunyikan teks dan ikon
+            binding.tvWeatherText.visibility = View.GONE
+            binding.ivWeatherIcon.visibility = View.GONE
+        }
+
 
         builder.setTitleText("Select Date Range")
        // builder.setCalendarConstraints(constraintsBuilder.build()) // Make sure to apply the constraints
