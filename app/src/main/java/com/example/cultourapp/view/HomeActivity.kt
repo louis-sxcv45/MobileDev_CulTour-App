@@ -38,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
+        userRepo = Injection.provideUserRepository(this)
         binding.ivLogout.setOnClickListener {
             userRepo.clearUserSession()
             val intent = Intent(this@HomeActivity, LoginActivity::class.java)
