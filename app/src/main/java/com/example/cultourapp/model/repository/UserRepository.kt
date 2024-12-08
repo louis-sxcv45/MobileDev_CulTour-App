@@ -63,11 +63,6 @@ class UserRepository(
                     val responseBody = response.body()
                     if(responseBody != null) {
                         responseBody.data?.let { userData ->
-//                            val email = userData.user.email ?: "Unknown Email"
-//                            val displayName = userData.user.displayName ?: "Unknown Display Name"
-//
-//                            val userModel = UserModel(email = email, displayName = displayName, token = userData.token, refreshToken = userData.refreshToken)
-
                             saveUserSession(userData)
                             Log.d("data", userData.toString())
                         }
@@ -96,50 +91,6 @@ class UserRepository(
                 callback(LoginResponse(success = false, data = null, message = t.message ?: "Unknown error"))
             }
         })
-    }
-
-//    fun refreshToken(callback: (Boolean) -> Unit) {
-//        val refreshToken = getRefreshToken()
-//        if (refreshToken.isNullOrEmpty()) {
-//            callback(false)
-//            return
-//        }
-//
-//        val requestBody = mapOf("refreshToken" to refreshToken)
-//
-//        // Call to the refresh token endpoint (not loginUser)
-//        apiService.loginUser(requestBody).enqueue(object : Callback<LoginResponse> {
-//            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-//                if (response.isSuccessful) {
-//                    val responseData = response.body()?.data
-//                    if (responseData != null) {
-//
-//                        // Save the refreshed user session
-//                        saveUserSession(responseData)
-//                        Log.d("data", responseData.toString())
-//
-//                        callback(true)
-//                    } else {
-//                        callback(false)
-//                    }
-//                } else {
-//                    callback(false)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-//                callback(false)
-//            }
-//        })
-//    }
-
-
-//    fun getToken(): String? {
-//        return userPreferences.getToken()
-//    }
-
-    private fun getRefreshToken(): String? {
-        return userPreferences.getRefreshToken()
     }
 
     fun saveUserSession(user: UserData) {
