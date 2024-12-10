@@ -11,6 +11,4 @@ interface WeatherApiService {
     fun getChatbot(
         @Body data: Response
     ): Call<ChatbotResponse>
-
-
 }

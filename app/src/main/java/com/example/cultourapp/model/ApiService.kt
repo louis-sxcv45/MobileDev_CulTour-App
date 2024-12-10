@@ -15,6 +15,5 @@ interface ApiService {
     @POST("login")
     fun loginUser(
         @Body data: Map<String, String>
-    ):
- Call<LoginResponse>
+    ): Call<LoginResponse>
 }

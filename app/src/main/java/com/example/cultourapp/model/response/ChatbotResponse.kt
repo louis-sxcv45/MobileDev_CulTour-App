@@ -15,4 +15,5 @@ data class ChatbotResponse(
 
 	@field:SerializedName("plot_url")
 	val plotUrl: String? = null
+
 )
