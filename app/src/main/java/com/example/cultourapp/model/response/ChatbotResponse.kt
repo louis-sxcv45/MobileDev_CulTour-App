@@ -14,5 +14,14 @@ data class ChatbotResponse(
 	val weatherSummary: String,
 
 	@field:SerializedName("plot_url")
-	val plotUrl: String
+	val plotUrl: String,
+
+
+
+
+
+)
+data class errorResponse(
+	@field:SerializedName("error")
+	val error: String,
 )
