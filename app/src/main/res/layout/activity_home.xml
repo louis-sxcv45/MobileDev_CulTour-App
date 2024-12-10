@@ -4,28 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:fillViewport="true">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         tools:context=".view.HomeActivity">
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"
             android:indeterminate="true"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.459"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.409" />
+            app:layout_constraintTop_toBottomOf="@id/tvWeatherInfo"
+            app:layout_constraintVertical_bias="0.017" />
 
         <ImageView
             android:id="@+id/ivLogout"
@@ -122,10 +123,10 @@
             android:id="@+id/chatBotLayout"
             android:layout_width="match_parent"
             android:layout_height="550dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/chatbot_background"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWeatherInfo">
+            app:layout_constraintTop_toBottomOf="@id/progressBar">
 
             <!--     Welcome Chatbot       -->
             <ImageView
