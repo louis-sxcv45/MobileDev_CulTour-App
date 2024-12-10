@@ -1,7 +1,9 @@
 package com.example.cultourapp.model.repository
 
+import android.util.Log
 import com.example.cultourapp.model.WeatherApiService
 import com.example.cultourapp.model.response.ChatbotResponse
+import com.example.cultourapp.model.response.errorResponse
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,9 +29,10 @@ class WeatherRepository(
                     val errorBody = response.errorBody()?.string()
                     val errorMessage = errorBody?.let {
                         try {
-                            val errorResponse = Gson().fromJson(it, ChatbotResponse::class.java)
-                            errorResponse.chatbotResponse ?: "Unknown error"
+                            val errorResponse = Gson().fromJson(it, errorResponse::class.java)
+                            errorResponse.error ?: "Unknown error"
                         } catch (e: Exception) {
+                            Log.e("WeatherRepository", "Failed to parse error message", e)
                             "Failed to parse error message"
                         }
                     } ?: "Unknown error occurred"
