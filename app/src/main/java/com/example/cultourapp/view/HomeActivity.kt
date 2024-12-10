@@ -53,7 +53,6 @@ class HomeActivity : AppCompatActivity() {
         userRepo = Injection.provideUserRepository(this)
         weatherRepo = Injection.provideWeatherRepository(this)
 
-
         binding.ivLogout.setOnClickListener {
             userRepo.clearUserSession()
             val intent = Intent(this@HomeActivity, LoginActivity::class.java)
@@ -122,9 +121,6 @@ class HomeActivity : AppCompatActivity() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
-
-
-
 
     @SuppressLint("SetTextI18n")
     private fun resetWeatherUI() {
