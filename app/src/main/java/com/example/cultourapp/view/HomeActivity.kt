@@ -103,6 +103,7 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 val errorMessage = weatherViewModel.errorMessage.value ?: "Invalid location or date range"
                 binding.tvWeatherText.text = "Error: $errorMessage"
+                binding.tvWeatherText.visibility = View.GONE
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                 Log.e("HomeActivity", "Error response: $errorMessage")
             }
@@ -112,6 +113,7 @@ class HomeActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.GONE
             if (!error.isNullOrEmpty()) {
                 binding.tvWeatherText.text = "Error: $error"
+                binding.tvWeatherText.visibility = View.VISIBLE
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
                 Log.e("HomeActivity", "Error: $error")
             }
