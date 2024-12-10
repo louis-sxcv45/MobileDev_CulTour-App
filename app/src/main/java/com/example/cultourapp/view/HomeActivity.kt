@@ -1,12 +1,14 @@
 package com.example.cultourapp.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import java.util.*
 import androidx.core.util.Pair
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -64,7 +66,10 @@ class HomeActivity : AppCompatActivity() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let { fetchWeatherData(it) }
-                return true
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.search.windowToken, 0)
+
+            return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
