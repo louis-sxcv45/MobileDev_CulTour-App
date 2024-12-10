@@ -7,7 +7,6 @@
     android:fitsSystemWindows="true"
     android:fillViewport="true">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -118,130 +117,145 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--   Chat Bot     -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Chat Bot Layout -->
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/chatBotLayout"
             android:layout_width="match_parent"
             android:layout_height="550dp"
-            android:layout_marginTop="15dp"
             android:background="@drawable/chatbot_background"
+            android:fitsSystemWindows="true"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progressBar">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            >
 
-            <!--     Welcome Chatbot       -->
-            <ImageView
-                android:id="@+id/ivChatBot"
-                android:layout_width="41dp"
-                android:layout_height="41dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/bot"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvChatBot"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/text_bg"
-                android:padding="12dp"
-                android:fontFamily="@font/input_font"
-                android:text="@string/welcome_chatbot"
-                android:textColor="@color/black"
-                android:autoLink="web"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivChatBot"
-                app:layout_constraintTop_toTopOf="@id/ivChatBot" />
+                <!--     Welcome Chatbot       -->
+                <ImageView
+                    android:id="@+id/ivChatBot"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/bot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Chat bubble 1 -->
-            <ImageView
-                android:id="@+id/ivChatBotUrl"
-                android:layout_width="41dp"
-                android:layout_height="41dp"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/bot"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvChatBotUrl"
-                app:layout_constraintTop_toTopOf="@id/tvChatBotUrl" />
+                <TextView
+                    android:id="@+id/tvChatBot"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/text_bg"
+                    android:padding="12dp"
+                    android:fontFamily="@font/input_font"
+                    android:text="@string/welcome_chatbot"
+                    android:textColor="@color/black"
+                    android:autoLink="web"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBot"
+                    app:layout_constraintTop_toTopOf="@id/ivChatBot" />
 
-            <TextView
-                android:id="@+id/tvChatBotUrl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/text_bg"
-                android:fontFamily="@font/input_font"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:autoLink="web"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivChatBotUrl"
-                app:layout_constraintTop_toBottomOf="@id/tvChatBot" />
+                <!-- Chat bubble 1 -->
+                <ImageView
+                    android:id="@+id/ivChatBotUrl"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/bot"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvChatBotUrl"
+                    app:layout_constraintTop_toTopOf="@id/tvChatBotUrl" />
 
-            <!-- Chat bubble 2 -->
-            <ImageView
-                android:id="@+id/ivChatBotResponse"
-                android:layout_width="41dp"
-                android:layout_height="41dp"
-                android:layout_marginStart="20dp"
-                android:visibility="gone"
-                android:src="@drawable/bot"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvChatBotResponse"
-                app:layout_constraintTop_toTopOf="@id/tvChatBotResponse" />
+                <TextView
+                    android:id="@+id/tvChatBotUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/text_bg"
+                    android:fontFamily="@font/input_font"
+                    android:visibility="gone"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    android:autoLink="web"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBotUrl"
+                    app:layout_constraintTop_toBottomOf="@id/tvChatBot" />
 
-            <TextView
-                android:id="@+id/tvChatBotResponse"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/text_bg"
-                android:fontFamily="@font/input_font"
-                android:visibility="gone"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivChatBotResponse"
-                app:layout_constraintTop_toBottomOf="@id/tvChatBotUrl"/>
+                <!-- Chat bubble 2 -->
+                <ImageView
+                    android:id="@+id/ivChatBotResponse"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="20dp"
+                    android:visibility="gone"
+                    android:src="@drawable/bot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvChatBotResponse"
+                    app:layout_constraintTop_toTopOf="@id/tvChatBotResponse" />
 
-            <!-- Chat bubble 3 -->
-            <ImageView
-                android:id="@+id/ivChatBotNorm"
-                android:layout_width="41dp"
-                android:layout_height="41dp"
-                android:visibility="gone"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/bot"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tvChatBotNorm"
-                app:layout_constraintTop_toTopOf="@id/tvChatBotNorm" />
+                <TextView
+                    android:id="@+id/tvChatBotResponse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/text_bg"
+                    android:fontFamily="@font/input_font"
+                    android:visibility="gone"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBotResponse"
+                    app:layout_constraintTop_toBottomOf="@id/tvChatBotUrl"/>
 
-            <TextView
-                android:id="@+id/tvChatBotNorm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"
-                android:background="@drawable/text_bg"
-                android:fontFamily="@font/input_font"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivChatBotNorm"
-                app:layout_constraintTop_toBottomOf="@id/tvChatBotResponse" />
+                <!-- Chat bubble 3 -->
+                <ImageView
+                    android:id="@+id/ivChatBotNorm"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:visibility="gone"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/bot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tvChatBotNorm"
+                    app:layout_constraintTop_toTopOf="@id/tvChatBotNorm" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvChatBotNorm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    android:background="@drawable/text_bg"
+                    android:fontFamily="@font/input_font"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBotNorm"
+                    app:layout_constraintTop_toBottomOf="@id/tvChatBotResponse"
+                    app:layout_constraintVertical_bias="0.0" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
