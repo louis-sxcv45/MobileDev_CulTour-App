@@ -8,6 +8,6 @@ import retrofit2.http.POST
 interface WeatherApiService {
     @POST("chatbot")
     fun getChatbot(
-        @Body data: Map<String, String> // Menggunakan Map untuk mengirim data dinamis
+        @Body data: Map<String, String>
     ): Call<ChatbotResponse>
 }
