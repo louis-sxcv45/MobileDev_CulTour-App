@@ -17,6 +17,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", "\"https://backend-dot-tutor-project-01-442206.et.r.appspot.com/auth/\"")
+        buildConfigField("String", "BASE_URL_WEATHER", "\"https://weather-chatbot-api-607952210942.us-central1.run.app/\"")
     }
 
     buildFeatures {
@@ -45,7 +46,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.material)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

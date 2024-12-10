@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#151515</color>
+    <color name="dark_liver">#817A7A</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tone_blue">#3D6F96</color>
     <color name="light_blue">#619DF8</color>
     <color name="light_grey">#D1D1D1</color>
     <color name="dim_grey">#696969</color>
+    <color name="platinum">#EBE8E8</color>
+    <color name="light_house">#F4F3F3</color>
     <color name="holo_red_dark">@android:color/holo_red_dark</color>
     <color name="transparent">@android:color/transparent</color>
 </resources>

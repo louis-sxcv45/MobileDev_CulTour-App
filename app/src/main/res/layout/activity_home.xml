@@ -1,30 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.HomeActivity">
+    android:fitsSystemWindows="true"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/tvHello"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        android:paddingTop="5dp"
+        tools:context=".view.HomeActivity">
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        app:layout_constraintTop_toTopOf="@+id/tvHello"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.459"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvWeatherInfo"
+            app:layout_constraintVertical_bias="0.017" />
+
+        <ImageView
+            android:id="@+id/ivLogout"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/search"
+            android:src="@drawable/baseline_logout_24"
+            />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/search_view_border"
+            android:focusable="false"
+            app:closeIcon="@drawable/baseline_clear_24"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivLogout"
+            app:queryHint="@string/search_hint"
+            app:searchHintIcon="@null"
+            app:searchIcon="@drawable/baseline_search_24" />
+
+        <EditText
+            android:id="@+id/etStartDate"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/start_date_text"
+            android:focusable="false"
+            android:drawableEnd="@drawable/baseline_calendar_month_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search" />
+
+        <EditText
+            android:id="@+id/etEndDate"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/end_date_text"
+            android:focusable="false"
+            android:drawableEnd="@drawable/baseline_calendar_month_24"
+            android:src="@drawable/baseline_calendar_month_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/etStartDate" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tvWeatherInfo"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_background"
+            android:padding="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etStartDate">
+
+            <TextView
+                android:id="@+id/tvWeatherText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                tools:text="@string/dummy_text"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@id/ivWeatherIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivWeatherIcon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                tools:src="@drawable/ic_cloudy"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Chat Bot Layout -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/chatBotLayout"
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            android:background="@drawable/chatbot_background"
+            android:fitsSystemWindows="true"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--     Welcome Chatbot       -->
+                <ImageView
+                    android:id="@+id/ivChatBot"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/bot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvChatBot"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/text_bg"
+                    android:padding="12dp"
+                    android:fontFamily="@font/input_font"
+                    android:text="@string/welcome_chatbot"
+                    android:textColor="@color/black"
+                    android:autoLink="web"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBot"
+                    app:layout_constraintTop_toTopOf="@id/ivChatBot" />
+
+                <!-- Chat bubble 1 -->
+                <ImageView
+                    android:id="@+id/ivChatBotUrl"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/bot"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvChatBotUrl"
+                    app:layout_constraintTop_toTopOf="@id/tvChatBotUrl" />
+
+                <TextView
+                    android:id="@+id/tvChatBotUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/text_bg"
+                    android:fontFamily="@font/input_font"
+                    android:visibility="gone"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    android:autoLink="web"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBotUrl"
+                    app:layout_constraintTop_toBottomOf="@id/tvChatBot" />
+
+                <!-- Chat bubble 2 -->
+                <ImageView
+                    android:id="@+id/ivChatBotResponse"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="20dp"
+                    android:visibility="gone"
+                    android:src="@drawable/bot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvChatBotResponse"
+                    app:layout_constraintTop_toTopOf="@id/tvChatBotResponse" />
+
+                <TextView
+                    android:id="@+id/tvChatBotResponse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/text_bg"
+                    android:fontFamily="@font/input_font"
+                    android:visibility="gone"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBotResponse"
+                    app:layout_constraintTop_toBottomOf="@id/tvChatBotUrl"/>
+
+                <!-- Chat bubble 3 -->
+                <ImageView
+                    android:id="@+id/ivChatBotNorm"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:visibility="gone"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/bot"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tvChatBotNorm"
+                    app:layout_constraintTop_toTopOf="@id/tvChatBotNorm" />
+
+                <TextView
+                    android:id="@+id/tvChatBotNorm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    android:background="@drawable/text_bg"
+                    android:fontFamily="@font/input_font"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivChatBotNorm"
+                    app:layout_constraintTop_toBottomOf="@id/tvChatBotResponse"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

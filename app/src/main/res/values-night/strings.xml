@@ -16,4 +16,13 @@
     <string name="text_already_have_an_account">Already have an account?</string>
     <string name="helper_text">Required</string>
     <string name="logout">Logout</string>
+    <string name="weather_summary">In the whole range of the date, the weather will be </string>
+    <string name="dummy_text">Weather Summary</string>
+    <string name="search_hint">Search (eg, Bali)</string>
+    <string name="start_date_text">Start Date</string>
+    <string name="end_date_text">End Date</string>
+    <string name="welcome_chatbot">I\'m your personal travel assistant. I can help you with weather updates, travel norms, and recommend what to pack or do.</string>
+    <string name="chatbot_url_text">Here are the summary of the weather report in your given range</string>
+    <string name="chatbot_response_text">Here are the recommendations on what you should do</string>
+    <string name="chatbot_norm_text">Here are some of the things you should be aware of in the area</string>
 </resources>

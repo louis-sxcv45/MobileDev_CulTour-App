@@ -41,20 +41,14 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
             _loading.postValue(false)
             _loginResponse.postValue(response)
             if (response.success) {
-                checkTokenExpiration()
                 response.data?.let { userData ->
-                    storeUserSession(
-                        UserModel(
-                            email = userData.user.email ?: "",
-                            displayName = userData.user.displayName ?: ""
-                        )
-                    )
+                    storeUserSession(userData)
                 }
             }
         }
     }
 
-     private fun storeUserSession(user: UserModel) {
+     private fun storeUserSession(user: UserData) {
         viewModelScope.launch {
             userRepository.saveUserSession(user)
             Log.d("AuthViewModel", "User session stored: $user")
@@ -65,28 +59,29 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
         return userRepository.getSession()
     }
 
-    private fun checkTokenExpiration() {
-        val token = userRepository.getToken()
-        if (token != null && isTokenExpired(token)) {
-            refreshToken()
-        }
-    }
-
-    private fun isTokenExpired(token: String): Boolean {
-        return System.currentTimeMillis() > getTokenExpirationTime(token)
-    }
-
-    private fun getTokenExpirationTime(token: String): Long {
-        return System.currentTimeMillis() + 3600000
-    }
-
-    private fun refreshToken() {
-        userRepository.refreshToken { success ->
-            if (success) {
-                Log.d("token", "token: ${userRepository.getToken()}")
-            } else {
-                // Handle token refresh failure
-            }
-        }
-    }
+//    private fun checkTokenExpiration() {
+//        val token = userRepository.getToken()
+//        if (token != null && isTokenExpired(token)) {
+//            refreshToken()
+//        }
+//    }
+//
+//    private fun isTokenExpired(token: String): Boolean {
+//        return System.currentTimeMillis() > getTokenExpirationTime(token)
+//    }
+//
+//    private fun getTokenExpirationTime(token: String): Long {
+//        return System.currentTimeMillis() + 3600000
+//    }
+//
+//    private fun refreshToken() {
+//        userRepository.refreshToken { success ->
+//            if (success) {
+//                Log.d("token", "token: ${userRepository.getToken()}")
+//                val
+//            } else {
+//                // Handle token refresh failure
+//            }
+//        }
+//    }
 }
