@@ -3,7 +3,6 @@ package com.example.cultourapp.model.pref
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.cultourapp.model.response.User
-import com.example.cultourapp.model.response.UserData
 
 class UserPreferences(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
