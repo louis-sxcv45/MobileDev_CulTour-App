@@ -63,4 +63,14 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.kotlinx.coroutines.android)
+    testImplementation ("org.mockito:mockito-core:3.11.2")
+    testImplementation ("org.mockito:mockito-inline:3.11.2")
+    testImplementation ("com.squareup.okhttp3:mockwebserver:4.9.1")
+    testImplementation ("org.robolectric:robolectric:4.10")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
+
+    // For coroutines testing
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
 }

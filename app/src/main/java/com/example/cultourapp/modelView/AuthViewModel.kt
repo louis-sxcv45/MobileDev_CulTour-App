@@ -30,7 +30,13 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
             if (response.success) {
                 _registerResponse.postValue(response)
             } else {
-                _registerResponse.postValue(RegisterResponse(success = false, data= null, message = response.message))
+                _registerResponse.postValue(
+                    RegisterResponse(
+                        success = false,
+                        data = null,
+                        message = response.message
+                    )
+                )
             }
         }
     }
@@ -48,7 +54,7 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
-     private fun storeUserSession(user: UserData) {
+    private fun storeUserSession(user: UserData) {
         viewModelScope.launch {
             userRepository.saveUserSession(user)
             Log.d("AuthViewModel", "User session stored: $user")
@@ -58,30 +64,4 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun getUserSession(): UserModel {
         return userRepository.getSession()
     }
-
-//    private fun checkTokenExpiration() {
-//        val token = userRepository.getToken()
-//        if (token != null && isTokenExpired(token)) {
-//            refreshToken()
-//        }
-//    }
-//
-//    private fun isTokenExpired(token: String): Boolean {
-//        return System.currentTimeMillis() > getTokenExpirationTime(token)
-//    }
-//
-//    private fun getTokenExpirationTime(token: String): Long {
-//        return System.currentTimeMillis() + 3600000
-//    }
-//
-//    private fun refreshToken() {
-//        userRepository.refreshToken { success ->
-//            if (success) {
-//                Log.d("token", "token: ${userRepository.getToken()}")
-//                val
-//            } else {
-//                // Handle token refresh failure
-//            }
-//        }
-//    }
 }
